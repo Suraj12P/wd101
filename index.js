@@ -9,34 +9,21 @@ let UserEntries = retrieveEntries();
 
 let displayEntries = () => {
   const entries = retrieveEntries();
+  const tableBody = document.getElementById("user-entries");
 
-  const tableEntries = entries
+  tableBody.innerHTML = entries
     .map((entry) => {
-      const nameCell = `<td class='border px-4 py-2'>${entry.name}</td>`;
-      const emailCell = `<td class='border px-4 py-2'>${entry.email}</td>`;
-      const passwordCell = `<td class='border px-4 py-2'>${entry.password}</td>`;
-      const dobCell = `<td class='border px-4 py-2'>${entry.dob}</td>`;
-      const acceptTermsCell = `<td class='border px-4 py-2'>${entry.acceptTerms}</td>`;
-
-      return `<tr>${nameCell} ${emailCell} ${passwordCell} ${dobCell} ${acceptTermsCell}</tr>`;
+      return `<tr>
+        <td class='border px-4 py-2'>${entry.name}</td>
+        <td class='border px-4 py-2'>${entry.email}</td>
+        <td class='border px-4 py-2'>${entry.password}</td>
+        <td class='border px-4 py-2'>${entry.dob}</td>
+        <td class='border px-4 py-2'>${entry.acceptTerms}</td>
+      </tr>`;
     })
     .join("\n");
-
-  const table = `<div class="flex justify-center">
-    <table class='table-auto w-[900px] items-center border'>
-        <tr>
-            <th class='px-4 py-2'>Name</th>
-            <th class='px-4 py-2'>Email</th>
-            <th class='px-4 py-2'>Password</th>
-            <th class='px-4 py-2'>Dob</th>
-            <th class='px-4 py-2'>Accept Terms?</th>
-        </tr>
-        ${tableEntries}
-    </table>
-</div>`;
-
-  document.getElementById("user-entries").innerHTML = table;
 };
+
 
 let saveUserForm = (event) => {
   event.preventDefault();
@@ -50,6 +37,7 @@ let saveUserForm = (event) => {
   const dobDate = new Date(dobInput.value);
   const today = new Date();
   let age = today.getFullYear() - dobDate.getFullYear();
+  console.log(age)
   const monthDiff = today.getMonth() - dobDate.getMonth();
 
   if (
@@ -61,7 +49,7 @@ let saveUserForm = (event) => {
 
   if (age < 18 || age > 55) {
     dobInput.setCustomValidity("Age must be between 18 and 55.");
-    dobInput.reportValidity(); 
+    dobInput.reportValidity();
     return;
   } else {
     dobInput.setCustomValidity("");
@@ -71,7 +59,7 @@ let saveUserForm = (event) => {
     name,
     email,
     password,
-    dob: dobInput.value, 
+    dob: dobInput.value,
     acceptTerms,
   };
 
@@ -79,7 +67,7 @@ let saveUserForm = (event) => {
   localStorage.setItem("user-entries", JSON.stringify(UserEntries));
   displayEntries();
 
-  userForm.reset(); // Clear the form after submission
+  userForm.reset();
 };
 
 userForm.addEventListener("submit", saveUserForm);
